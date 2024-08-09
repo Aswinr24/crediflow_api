@@ -13,7 +13,7 @@ const app = express()
 app.use(cors())
 const port = 8080
 
-app.use(express.static(path.join(__dirname, '/public')))
+app.use(express.static(path.join(__dirname, '/')))
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 app.use(methodoverride('_method'))
@@ -26,8 +26,8 @@ if (!fs.existsSync(uploadsDir)) {
 
 const upload = multer({ dest: uploadsDir })
 
-app.listen(port, () => {
-  console.log(`Listening on port ${port}`)
+app.get('/', (req, res) => {
+  res.send('Home!')
 })
 
 app.post('/uploadDocument', upload.single('file'), async (req, res) => {
@@ -63,4 +63,8 @@ app.post('/uploadText', async (req, res) => {
   } catch (error) {
     console.log(error)
   }
+})
+
+app.listen(port, () => {
+  console.log(`Listening on port ${port}`)
 })
