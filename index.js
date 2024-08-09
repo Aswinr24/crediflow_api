@@ -1,5 +1,3 @@
-require('dotenv').config()
-
 const express = require('express')
 const path = require('path')
 const axios = require('axios')
@@ -9,6 +7,7 @@ const methodoverride = require('method-override')
 const FormData = require('form-data')
 const cors = require('cors')
 const lighthouse = require('@lighthouse-web3/sdk')
+require('dotenv').config()
 
 const app = express()
 app.use(cors())
