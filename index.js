@@ -48,9 +48,10 @@ app.post('/uploadDocument', upload.single('file'), async (req, res) => {
 
 app.post('/uploadText', async (req, res) => {
   console.log(req.body)
+  const text = req.body.text
+  let text2
   try {
     const parsedText = JSON.parse(text)
-
     text2 = JSON.stringify(parsedText)
   } catch (e) {
     text2 = text
