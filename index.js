@@ -11,18 +11,13 @@ const app = express()
 app.use(cors())
 const port = 8080
 
-app.use(express.static(path.join(__dirname, '/')))
+app.use(express.static(path.join(__dirname, '/public')))
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
-app.use(methodoverride('_method'))
 
 const API_KEY = process.env.LIGHTHOUSE_API_KEY
-const uploadsDir = path.join(__dirname, 'uploads')
-if (!fs.existsSync(uploadsDir)) {
-  fs.mkdirSync(uploadsDir)
-}
 
-const upload = multer({ dest: uploadsDir })
+const upload = multer({ storage: multer.memoryStorage() })
 
 app.get('/', (req, res) => {
   res.send('Home!')
@@ -34,9 +29,8 @@ app.post('/uploadDocument', upload.single('file'), async (req, res) => {
   if (!file) {
     return res.status(400).json({ error: 'No file uploaded' })
   }
-  const filePath = file.path
   try {
-    const uploadResponse = await lighthouse.upload(filePath, API_KEY)
+    const uploadResponse = await lighthouse.uploadBuffer(file.buffer, API_KEY)
     console.log(uploadResponse)
     res.json({ uploadResponse })
   } catch (error) {
